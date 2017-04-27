@@ -16,6 +16,8 @@ epsilon = 100 # +- $100 from total cost
 low = 0
 high = 10000
 num_guesses = 0
+if annual_salary*3 < down_payment:
+    print("It is not possible to pay the down payment in three years.")
 while abs(down_payment-current_savings) >= epsilon:
     current_savings = 0
     monthly_salary = annual_salary/12
@@ -34,7 +36,7 @@ while abs(down_payment-current_savings) >= epsilon:
         high = portion_s
     num_guesses += 1 
 
-if portion_s > 6500:
+if portion_s > 6000:
     print("It is not possible to pay the down payment in three years.")
 else:
     print("Steps in bisection search: ", num_guesses)
