@@ -56,7 +56,15 @@ def is_word_guessed(secret_word, letters_guessed):
     returns: boolean, True if all the letters of secret_word are in letters_guessed;
       False otherwise\
     '''
-    # FILL IN YOUR CODE HERE AND DELETE "pass"
+    g_let = [] #the empty list in which we will put letters_guessed which are in secret_word
+    secret_list = list(secret_word) #make list from string
+    for char in secret_list:
+        if char in letters_guessed:
+            g_let.append(char) #make list with guessed letters
+    if len(secret_list) == len(g_let):
+        return True
+    else:
+        return False
     
     
 
@@ -69,16 +77,9 @@ def get_guessed_word(secret_word, letters_guessed):
     returns: string, comprised of letters, underscores (_), and spaces that represents
       which letters in secret_word have been guessed so far.
     '''
-    g_let = [] #the empty list in which we will put letters_guessed which are in secret_word
-    secret_list = list(secret_word) #make list from string
-    for char in secret_list:
-        if char in letters_guessed:
-            g_let.append(char)
-    if len(secret_list) == len(g_let):
-        return True
-    else:
-        return False
-
+    part_secret_word = ''.join([char if char in letters_guessed else ' _ ' for char in secret_word]) # secret_word with '_'
+    return part_secret_word
+                              
 
 
 def get_available_letters(letters_guessed):
@@ -87,7 +88,11 @@ def get_available_letters(letters_guessed):
     returns: string (of letters), comprised of letters that represents which letters have not
       yet been guessed.
     '''
-    # FILL IN YOUR CODE HERE AND DELETE "pass"
+    all_letters = list(string.ascii_lowercase[:]) # The lowercase letters 'abcdefghijklmnopqrstuvwxyz'
+    available_letters = all_letters[:] #Make copy of all_letters
+    for char in letters_guessed:
+        available_letters.remove(char)
+    return str(available_letters)
     
     
     
@@ -134,35 +139,32 @@ guessed_letters = []
 letters_guessed = []
 
 while number_of_guesses > 0 and number_of_guessed_letters < len(secret_word):
+    print("Secret word: ", get_guessed_word(secret_word, letters_guessed))
     input_letter = input("Please, enter a letter (your guess): ")
     letters_guessed.append(input_letter)
+    
     if input_letter in secret_word:
         print("You'r lucky! The letter is in word!")
         guessed_letters+=input_letter
-        
-        for char in secret_word:
-            
-            if char in guessed_letters:
-                print(char)                
-            else:
-                print("_")
-        
+        print("You have not tried these letters: ", get_available_letters(letters_guessed))
+    
     else:
         number_of_guesses -= 1
         print("Ooops! You have", str(number_of_guesses), "guesses")
-    
+        print ("You have not tried these letters: ", get_available_letters(letters_guessed))
+            
     if number_of_guesses == 0:
-            break
+            break      
             
-            
-if get_guessed_word(secret_word, letters_guessed) == True:
-    print("You win!")
-else:
-    print("Game over!")
-    print("The word was", secret_word)
+#if get_guessed_word(secret_word, letters_guessed) == True:
+#    
+#    print("You win!")
+#else:
+#    print("Game over!")
 
 
-    
+print(is_word_guessed(secret_word, letters_guessed) )
+print("The word was", secret_word)   
     
 
 
