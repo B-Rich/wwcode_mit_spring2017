@@ -92,7 +92,7 @@ def get_available_letters(letters_guessed):
     available_letters = all_letters[:] #Make copy of all_letters
     for char in letters_guessed:
         available_letters.remove(char)
-    return str(available_letters)
+    return ''.join(available_letters)
     
     
     
@@ -156,8 +156,7 @@ while number_of_guesses > 0 and number_of_guessed_letters < len(secret_word):
     if number_of_guesses == 0:
             break      
             
-#if get_guessed_word(secret_word, letters_guessed) == True:
-#    
+#if get_guessed_word(secret_word, letters_guessed) == True:   
 #    print("You win!")
 #else:
 #    print("Game over!")
