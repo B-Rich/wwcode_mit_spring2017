@@ -59,17 +59,17 @@ while number_of_guesses>0 and number_of_guessed_letters<len(secret_word):
     if input_letter in secret_word:
         print("You'r lucky! The letter is in word!")
         guessed_letters+=input_letter
-        #print(guessed_letters)
-        
-        for char in secret_word:
             
-            if char in guessed_letters:
-                print(char)
-                if char==input_letter:
-                    number_of_guessed_letters+=1
-                
-            else:
-                print("_")
+        print(''.join([char if char in guessed_letters else ' _ ' for char in secret_word]))
+#        for char in secret_word:
+#          
+#            if char in guessed_letters:
+#                print(char)
+#                if char==input_letter:
+#                    number_of_guessed_letters+=1
+#                
+#            else:
+#                print("_")
         
         if number_of_guessed_letters==len(secret_word):
                     print("You win!")
