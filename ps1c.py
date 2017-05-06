@@ -16,29 +16,30 @@ epsilon = 100 # +- $100 from total cost
 low = 0
 high = 10000
 num_guesses = 0
-if annual_salary*3 < down_payment:
-    print("It is not possible to pay the down payment in three years.")
-while abs(down_payment-current_savings) >= epsilon:
+
+while abs(down_payment - current_savings) > epsilon:
     current_savings = 0
     monthly_salary = annual_salary/12
-    portion_s=(high+low)/2
+    portion_s = int((high+low)/2)
     for i in range (36):
-        if (i+1) % 6 == 0:
-            monthly_salary = monthly_salary*(1+semi_annual_raise)
-       
-        monthly_savings=monthly_salary*(portion_s/10000)
+        if i != 0 and i % 6 == 0:
+            monthly_salary += monthly_salary*semi_annual_raise
+        #print(monthly_salary)
+        monthly_savings = monthly_salary*(portion_s/10000)
         a = current_savings*(r/12)
-        current_savings=current_savings+a+monthly_savings
-        
-    if current_savings-down_payment < 0:
+        current_savings += a + monthly_savings
+            
+    if current_savings - down_payment < 0:
         low = portion_s
     else:
         high = portion_s
     num_guesses += 1 
+    
+    if low > 9900:
+        print("It is not possible to pay the down payment in three years.")
+        break
 
-if portion_s > 6000:
-    print("It is not possible to pay the down payment in three years.")
-else:
-    print("Steps in bisection search: ", num_guesses)
-    print("Best savings rate: ", portion_s/10000)
+print("Best savings rate: ", portion_s/10000)
+print("Steps in bisection search: ", num_guesses)
+    
 
