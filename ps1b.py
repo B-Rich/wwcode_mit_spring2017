@@ -17,13 +17,11 @@ n_months = 0
 r = 0.04
 
 while current_savings <= down_payment:
-    n_months += 1
-    if (n_months-1) != 0 and (n_months-1) % 6 == 0:
-       monthly_salary += monthly_salary*semi_annual_raise
-    print(monthly_salary)
     monthly_savings = monthly_salary*portion_saved
     a = current_savings*(r/12)
     current_savings = current_savings + a + monthly_savings
-       
+    n_months += 1
+    if n_months % 6 == 0:
+       monthly_salary += monthly_salary*semi_annual_raise   
 print("Number of months: ", n_months)
 
