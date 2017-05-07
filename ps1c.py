@@ -35,11 +35,11 @@ while abs(down_payment - current_savings) > epsilon:
         high = portion_s
     num_guesses += 1 
     
-    if low > 9900:
-        print("It is not possible to pay the down payment in three years.")
+    if low + 1 >= high:
         break
 
-print("Best savings rate: ", portion_s/10000)
-print("Steps in bisection search: ", num_guesses)
-    
-
+if 0 < ((portion_s - 1 )/ 10000) < 1:
+    print("Best savings rate: ", portion_s/10000)
+    print("Steps in bisection search: ", num_guesses)
+else:
+    print("It is not possible to pay the down payment in three years.")
