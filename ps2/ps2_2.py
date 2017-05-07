@@ -133,37 +133,34 @@ number_of_guesses = 6
 number_of_guessed_letters = 0
 secret_word=choose_word(wordlist)
 print("Hello! This is HANGMAAAAAN!!! Let's start! Good luck!\n")
-print("You have a", str(number_of_guesses), "quesses. The secret word has", len(secret_word), "lowercase letters.")
+print("The secret word has", len(secret_word), "lowercase letters.")
 #print(secret_word)
 guessed_letters = []
 letters_guessed = []
 
-while number_of_guesses > 0 and number_of_guessed_letters < len(secret_word):
+while number_of_guesses > 0:
+    print("You have", str(number_of_guesses), "guesses")
+    print("You have not tried these letters: ", get_available_letters(letters_guessed))
     print("Secret word: ", get_guessed_word(secret_word, letters_guessed))
     input_letter = input("Please, enter a letter (your guess): ")
-    letters_guessed.append(input_letter)
+    if input_letter not in letters_guessed:
+        letters_guessed.append(input_letter)
+    else:
+        print("You've already tried this letter, choose another")
     
-    if input_letter in secret_word:
+    if input_letter in secret_word and input_letter in letters_guessed:
         print("You'r lucky! The letter is in word!")
         guessed_letters+=input_letter
-        print("You have not tried these letters: ", get_available_letters(letters_guessed))
-    
+            
     else:
         number_of_guesses -= 1
-        print("Ooops! You have", str(number_of_guesses), "guesses")
-        print ("You have not tried these letters: ", get_available_letters(letters_guessed))
-            
+        print("Ooops! That letter is not in secret word")    
+        
     if number_of_guesses == 0:
-            break      
-            
-#if get_guessed_word(secret_word, letters_guessed) == True:   
-#    print("You win!")
-#else:
-#    print("Game over!")
+        print("Game over!")    
+        break
+    elif is_word_guessed(secret_word, letters_guessed) == True:
+        print("You won!")
+        break
 
-
-print(is_word_guessed(secret_word, letters_guessed) )
 print("The word was", secret_word)   
-    
-
-
