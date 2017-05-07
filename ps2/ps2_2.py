@@ -145,17 +145,16 @@ while number_of_guesses > 0:
     input_letter = input("Please, enter a letter (your guess): ")
     if input_letter not in letters_guessed:
         letters_guessed.append(input_letter)
+        if input_letter in secret_word:
+            print("You'r lucky! The letter is in word!")
+            guessed_letters+=input_letter
+            
+        else:
+            number_of_guesses -= 1
+            print("Ooops! That letter is not in secret word")
     else:
         print("You've already tried this letter, choose another")
-    
-    if input_letter in secret_word and input_letter in letters_guessed:
-        print("You'r lucky! The letter is in word!")
-        guessed_letters+=input_letter
-            
-    else:
-        number_of_guesses -= 1
-        print("Ooops! That letter is not in secret word")    
-        
+          
     if number_of_guesses == 0:
         print("Game over!")    
         break
