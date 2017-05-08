@@ -1,9 +1,8 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Wed Apr 12 14:36:23 2017
+Created on Mon May  8 22:32:02 2017
 
-@author: Marianna K.
+@author: Marianna
 """
 
 import random
@@ -122,31 +121,41 @@ def hangman(secret_word):
 
     Follows the other limitations detailed in the problem write-up.
     '''
-#    input_letter = input("Please, enter a letter (your guess)")
-#    return input_letter
-
 number_of_guesses = 6
+warnings = 3
 number_of_guessed_letters = 0
 secret_word = choose_word(wordlist)
-print("Hello! This is HANGMAAAAAN!!! Let's start! Good luck!\n")
-print("The secret word has", len(secret_word), "lowercase letters.")
-#print(secret_word)
+print("Welcome to the game Hangman!")
+print("I am thinking of a word that is", len(secret_word), "letters long.")
+print("--------------------------------")
 guessed_letters = []
 letters_guessed = []
 
 while number_of_guesses > 0:
-    print("You have", str(number_of_guesses), "guesses")
-    print("You have not tried these letters: ", get_available_letters(letters_guessed))
+    print("You have", str(warnings), "warnings left.")
+    print("You have", str(number_of_guesses), "guesses left.")
+    print("Available letters:: ", get_available_letters(letters_guessed))
     print("Secret word: ", get_guessed_word(secret_word, letters_guessed))
-    input_letter = input("Please, enter a letter (your guess): ")
-    if input_letter not in letters_guessed:
-        letters_guessed.append(input_letter)
-        if input_letter in secret_word:
-            print("You'r lucky! The letter is in word!")
-            guessed_letters+=input_letter
-        else:
-            number_of_guesses -= 1
-            print("Ooops! That letter is not in secret word")
+    guess = input("Please guess a letter: ")
+    input_letter = str.lower(guess)
+    if len(input_letter) == 1:
+        if str.isalpha(input_letter) is True:
+            if input_letter not in letters_guessed:
+                letters_guessed.append(input_letter)
+                if input_letter in secret_word:
+                    guessed_letters+=input_letter
+                    print("Good guess:", get_guessed_word(secret_word, letters_guessed))
+                    print("--------------------------------")
+                else:
+                    number_of_guesses -= 1
+                    print("Oops! That letter is not in my word:", get_guessed_word(secret_word, letters_guessed))
+                    print("--------------------------------")
+        
+    elif len(input_letter) > 1:
+        print("Please, only one character at a time")
+    
+            
+
     else:
         print("You've already tried this letter, choose another")
              
@@ -158,4 +167,3 @@ while number_of_guesses > 0:
         break
 
 print("The word was", secret_word)
-  
