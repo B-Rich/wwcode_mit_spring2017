@@ -89,9 +89,10 @@ def get_word_score(word, n):
     returns: int >= 0
     """
     first_component = 0
-    for letter in word:
-        first_component += SCRABBLE_LETTER_VALUES.values(letter)
-    second_component = 7*len(word) - 3*(n - len(word))
+    word_lowercase = word.lower()
+    for letter in word_lowercase:
+        first_component += SCRABBLE_LETTER_VALUES[letter]
+    second_component = 7*len(word_lowercase) - 3*(n - len(word_lowercase))
     if second_component < 1:
         second_component = 1
     score = first_component*second_component
@@ -170,8 +171,18 @@ def update_hand(hand, word):
     hand: dictionary (string -> int)    
     returns: dictionary (string -> int)
     """
-
-    pass  # TO DO... Remove this line when you implement this function
+    
+    new_hand = {}
+    word_dict = get_frequency_dict(word.lower())
+    for k, v in hand.items():
+        new_hand[k] = v - word_dict.get(k, 0) # returns value if k exists in d2, otherwise 0
+#
+#    for letter in word_dict:
+#        if letter in hand:
+#            new_values = word_dict[letter] - hand[letter]
+#            if new_values > 0:
+#                new_hand[letter] = new_values
+    return new_hand
 
 #
 # Problem #3: Test word validity
@@ -187,8 +198,20 @@ def is_valid_word(word, hand, word_list):
     word_list: list of lowercase strings
     returns: boolean
     """
-
-    pass  # TO DO... Remove this line when you implement this function
+    word_dict = get_frequency_dict(word.lower())
+    if word.lower() in word_list:
+        for key in word_dict:
+            if key in hand.keys():
+                if word_dict[key] <= hand[key]:
+                    continue
+                else:
+                    return False
+            else:
+                return False
+        return True
+                
+    else:
+        return False
 
 #
 # Problem #5: Playing a hand
