@@ -90,15 +90,17 @@ def get_word_score(word, n):
     n: int >= 0
     returns: int >= 0
     """
-    first_component = 0
-    word_lowercase = word.lower()
-    for letter in word_lowercase:
-        first_component += SCRABBLE_LETTER_VALUES[letter]
-    second_component = 7*len(word_lowercase) - 3*(n - len(word_lowercase))
-    if second_component < 1:
-        second_component = 1
-    score = first_component*second_component
-    return score
+    if is_valid_word(word, hand, word_list) is True:
+        first_component = 0
+        word_lowercase = word.lower()
+        for letter in word_lowercase:
+            first_component += SCRABBLE_LETTER_VALUES[letter]
+        second_component = 7*len(word_lowercase) - 3*(n - len(word_lowercase))
+        if second_component < 1:
+            second_component = 1
+        score = first_component*second_component
+        return score
+
 
 #
 # Make sure you understand how this function works and what it does!
@@ -278,15 +280,16 @@ def play_hand(hand, word_list):
     
     # BEGIN PSEUDOCODE <-- Remove this comment when you implement this function
     # Keep track of the total score
-    
+    while len(hand) > 0:
     # As long as there are still letters left in the hand:
     
         # Display the hand
-        
-        # Ask user for input
-        
-        # If the input is two exclamation points:
-        
+        print("Current Hand:", display_hand(hand))
+        word = input('Enter word, or "!!" to indicate that you are finished: ')    
+        if word == "!!":
+            break
+        else:
+            
             # End the game (break out of the loop)
 
             
