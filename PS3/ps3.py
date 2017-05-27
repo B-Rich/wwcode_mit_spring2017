@@ -239,7 +239,9 @@ def calculate_handlen(hand):
     hand: dictionary (string-> int)
     returns: integer
     """
-    handlen = len(hand)
+    handlen = 0
+    for char in hand:
+        handlen += hand[char]
     return handlen
 
 def play_hand(hand, word_list):
@@ -274,24 +276,25 @@ def play_hand(hand, word_list):
     """
     n = calculate_handlen(hand)
     total_score = 0
-    while calculate_handlen(hand) > 0:
-        print("Current Hand: ")
+    while n > 0:
+        print("Current Hand: ", end="")
         display_hand(hand)
         word = input('Enter word, or "!!" to indicate that you are finished: ')    
         if word == "!!":
-            print("Total score:", total_score, "points")
+            print("Total score for this hand:", total_score, "points")
             break
         else:
             if is_valid_word(word, hand, word_list) is True:
                 total_score += get_word_score(word, n)
-                print(word, 'earned', get_word_score(word, n), 'points.' )
-                print("Total:", total_score, "points")
-                hand = update_hand(hand, word)
+                print(word, 'earned', get_word_score(word, n), 'points.')                
             else:
                 print("That is not a valid word. Please choose another word.")
-                hand = update_hand(hand, word)
-    if calculate_handlen(hand) == 0:
-        print("Ran out of letters. Total score:", total_score, "points")
+            hand = update_hand(hand, word)
+            n = calculate_handlen(hand)
+        
+    if n == 0:
+        print("Ran out of letters. Total score for this hand: ", total_score, "points")
+        
     return total_score
 
 
@@ -366,11 +369,12 @@ def play_game(word_list):
     """
     num_of_hands = int(input('Enter total number of hands: '))
     total_score = 0
+    score = 0
     hand = deal_hand(HAND_SIZE)
-    print("Current Hand: ")
+    print("Current Hand: ", end="")
     display_hand(hand)
     substitute = 1
-    while num_of_hands > 1:
+    while num_of_hands >= 1:
         while substitute == 1:
             ans_sub = input('Would you like to substitute a letter? ')
             if ans_sub == 'yes' or ans_sub == 'y':
@@ -380,16 +384,19 @@ def play_game(word_list):
             elif ans_sub == 'no' or ans_sub == 'n':
                 substitute -= 1
                 
-        ans_replay = input('Would you like to replay the hand? ')            
-        if ans_replay == 'yes' or ans_replay == 'y':
-            hand = deal_hand(HAND_SIZE)
-            substitute -= 1
-            num_of_hands -= 1
-            score = play_hand(hand, word_list)
-            total_score += score
-        elif ans_replay == 'no':
-            score = play_hand(hand, word_list)
-        total_score += score 
+        score = play_hand(hand, word_list)
+        num_of_hands -= 1
+        
+        while num_of_hands >= 1:
+            ans_replay = input('Would you like to replay the hand? ')            
+            if ans_replay == 'yes' or ans_replay == 'y':
+                hand = deal_hand(HAND_SIZE)
+                substitute -= 1
+                num_of_hands -= 1
+                score1 = play_hand(hand, word_list)
+                total_score += score1
+                
+    total_score += score 
 
     print('------------------------------------------')
     print('Total score over all hands: ', total_score)
@@ -406,5 +413,3 @@ if __name__ == '__main__':
     word_list = load_words()
     hand = {}
     play_game(word_list)
-    
-
