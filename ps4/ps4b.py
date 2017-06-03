@@ -127,9 +127,9 @@ class Message(object):
         Returns: the message text (string) in which every character is shifted
              down the alphabet by the input shift
         '''
-        encryption_dict = self.build_shift_dict(self, shift)
-        message_text_encrypted = [encryption_dict[letter] for letter in self.message_text
-                           if letter in encryption_dict]
+        encryption_dict = self.build_shift_dict(self.shift)
+        message_text_encrypted = ''.join([encryption_dict[letter] for letter in self.message_text
+                           if letter in encryption_dict])
         return message_text_encrypted
 
 class PlaintextMessage(Message):
@@ -148,7 +148,10 @@ class PlaintextMessage(Message):
             self.message_text_encrypted (string, created using shift)
 
         '''
-        
+        Message.__init__(self, text)
+        self.shift = shift
+        self.encryption_dict = Message.build_shift_dict(self, shift)
+        self.message_text_encrypted = self.apply_shift(shift)
 
     def get_shift(self):
         '''
@@ -185,8 +188,8 @@ class PlaintextMessage(Message):
         Returns: nothing
         '''
         self.shift = shift
-        self.encryption_dict = self.build_shift_dict(self.shift)
-        self.message_text_encrypted = self.apply_shift(self.shift)
+        self.encryption_dict = self.build_shift_dict(self, shift)
+        self.message_text_encrypted = self.apply_shift(shift)
 
 
 
@@ -201,7 +204,7 @@ class CiphertextMessage(Message):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-
+        Message.__init__(self, text)
 
     def decrypt_message(self):
         '''
@@ -219,7 +222,17 @@ class CiphertextMessage(Message):
         Returns: a tuple of the best shift value used to decrypt the message
         and the decrypted message text using that shift value
         '''
-        pass #delete this line and replace with your code here
+        message_text_encrypted = self.get_message_text_encrypted(self)
+        word_list = self.get_valid_words(self)
+        shifts = []
+        for shift in range (27):
+            for word in message_text_encrypted:
+                message_text_encrypted = self.apply_shift(self, shift)             
+                if is_word(word_list, word) is True:
+                    shifts[shift] += 1
+        best_shift = max(shifts)
+        decrypted_message = self.apply_shift(self, best_shift)
+        return (best_shift, decrypted_message)
 
 if __name__ == '__main__':
 
@@ -236,7 +249,6 @@ if __name__ == '__main__':
     #TODO: WRITE YOUR TEST CASES HERE
 
     #TODO: best shift value and unencrypted story 
-    
-    text = "abcd"
-    shift = 3
-    
+
+
+
