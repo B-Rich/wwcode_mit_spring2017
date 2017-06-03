@@ -1,7 +1,5 @@
 # Problem Set 4B
-# Name: <your name here>
-# Collaborators:
-# Time Spent: x:xx
+# Name: Marianna Kovalova
 
 import string
 
@@ -70,7 +68,9 @@ class Message(object):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+        wordlist = load_words(WORDLIST_FILENAME)
+        self.message_text = text
+        self.valid_words = wordlist
 
     def get_message_text(self):
         '''
@@ -78,7 +78,7 @@ class Message(object):
         
         Returns: self.message_text
         '''
-        pass #delete this line and replace with your code here
+        return self.message_text
 
     def get_valid_words(self):
         '''
@@ -87,7 +87,7 @@ class Message(object):
         
         Returns: a COPY of self.valid_words
         '''
-        pass #delete this line and replace with your code here
+        return self.valid_words.copy()
 
     def build_shift_dict(self, shift):
         '''
@@ -103,7 +103,17 @@ class Message(object):
         Returns: a dictionary mapping a letter (string) to 
                  another letter (string). 
         '''
-        pass #delete this line and replace with your code here
+        alphabet_lowercase = string.ascii_lowercase
+        alphabet_uppercase = string.ascii_uppercase
+        #alphabet = alphabet_uppercase + alphabet_lowercase
+        encryption_dict = {
+                letter:alphabet_lowercase[(alphabet_lowercase.index(letter)+shift) % 26]
+            for letter in alphabet_lowercase}
+        encryption_dict_upper = {
+                letter:alphabet_uppercase[(alphabet_uppercase.index(letter)+shift) % 26]
+            for letter in alphabet_uppercase}
+        encryption_dict.update(encryption_dict_upper)
+        return encryption_dict
 
     def apply_shift(self, shift):
         '''
@@ -117,7 +127,10 @@ class Message(object):
         Returns: the message text (string) in which every character is shifted
              down the alphabet by the input shift
         '''
-        pass #delete this line and replace with your code here
+        encryption_dict = self.build_shift_dict(self, shift)
+        message_text_encrypted = [encryption_dict[letter] for letter in self.message_text
+                           if letter in encryption_dict]
+        return message_text_encrypted
 
 class PlaintextMessage(Message):
     def __init__(self, text, shift):
@@ -135,7 +148,7 @@ class PlaintextMessage(Message):
             self.message_text_encrypted (string, created using shift)
 
         '''
-        pass #delete this line and replace with your code here
+        
 
     def get_shift(self):
         '''
@@ -143,7 +156,7 @@ class PlaintextMessage(Message):
         
         Returns: self.shift
         '''
-        pass #delete this line and replace with your code here
+        return self.shift
 
     def get_encryption_dict(self):
         '''
@@ -151,7 +164,7 @@ class PlaintextMessage(Message):
         
         Returns: a COPY of self.encryption_dict
         '''
-        pass #delete this line and replace with your code here
+        return self.encryption_dict.copy()
 
     def get_message_text_encrypted(self):
         '''
@@ -159,7 +172,7 @@ class PlaintextMessage(Message):
         
         Returns: self.message_text_encrypted
         '''
-        pass #delete this line and replace with your code here
+        return self.message_text_encrypted
 
     def change_shift(self, shift):
         '''
@@ -171,7 +184,10 @@ class PlaintextMessage(Message):
 
         Returns: nothing
         '''
-        pass #delete this line and replace with your code here
+        self.shift = shift
+        self.encryption_dict = self.build_shift_dict(self.shift)
+        self.message_text_encrypted = self.apply_shift(self.shift)
+
 
 
 class CiphertextMessage(Message):
@@ -185,7 +201,7 @@ class CiphertextMessage(Message):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+
 
     def decrypt_message(self):
         '''
@@ -221,4 +237,6 @@ if __name__ == '__main__':
 
     #TODO: best shift value and unencrypted story 
     
-    pass #delete this line and replace with your code here
+    text = "abcd"
+    shift = 3
+    
