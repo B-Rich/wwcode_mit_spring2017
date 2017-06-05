@@ -277,5 +277,6 @@ if __name__ == '__main__':
 #    print('Expected Output:', (1, "Namespaces are one honking great idea -- let's do more of those!"))
 #    print('Actual Output:', ciphertext.decrypt_message())
 #    print("-------------------------------------------------------")
-    
+    ciphertext = CiphertextMessage(get_story_string())
+    print("The appropriate shift value and unencrypted story is: ", ciphertext.decrypt_message())
 
