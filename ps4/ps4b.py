@@ -86,7 +86,7 @@ class Message(object):
         
         Returns: a COPY of self.valid_words
         '''
-        return self.valid_words.copy()
+        return self.message_text
 
     def build_shift_dict(self, shift):
         '''
@@ -104,7 +104,6 @@ class Message(object):
         '''
         alphabet_lowercase = string.ascii_lowercase
         alphabet_uppercase = string.ascii_uppercase
-        #alphabet = alphabet_uppercase + alphabet_lowercase
         encryption_dict = {
                 letter:alphabet_lowercase[(alphabet_lowercase.index(letter)+shift) % 26]
             for letter in alphabet_lowercase}
@@ -277,6 +276,6 @@ if __name__ == '__main__':
 #    print('Expected Output:', (1, "Namespaces are one honking great idea -- let's do more of those!"))
 #    print('Actual Output:', ciphertext.decrypt_message())
 #    print("-------------------------------------------------------")
+
     ciphertext = CiphertextMessage(get_story_string())
     print("The appropriate shift value and unencrypted story is: ", ciphertext.decrypt_message())
-
