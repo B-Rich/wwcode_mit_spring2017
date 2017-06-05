@@ -1,7 +1,5 @@
 # Problem Set 4C
-# Name: <your name here>
-# Collaborators:
-# Time Spent: x:xx
+# Name: Marianna Kovalova
 
 import string
 from ps4a import get_permutations
@@ -159,40 +157,42 @@ class EncryptedSubMessage(SubMessage):
         Hint: use your function from Part 4A
         '''
         all_vowel_permutation = get_permutations(permutation)
-        num_of_real_words = []
+        list_of_dict = []
+        max_count = 0
+        
         for vowel_permutation in all_vowel_permutation:
-            print(vowel_permutation)
             new_dict = SubMessage.build_transpose_dict(self, vowel_permutation)
-            print(new_dict)
             temp_text = SubMessage.apply_transpose(self, new_dict)
             chars = " ,!@#$%^&*()-_+={}[]|\:;'<>?./\""
-            print(temp_text)
+            list_of_dict.append(new_dict)
             for c in chars:
                 temp_text = temp_text.replace(c, ' ')
             temp_text = temp_text.split()
+            count = 0 
             for word in temp_text:
-                count = 0                        
-                if is_word(self.valid_words, word) is True:
+                if is_word(wordlist, word) is True:
                     count += 1
-            num_of_real_words.append(count)
-        best_res = num_of_real_words.index(max(num_of_real_words))
-        decrypted_message = self.apply_transpose(all_vowel_permutation[best_res])
-        return decrypted_message
+            
+            if count > max_count:
+                max_count = count
+                best_decrypted_message = SubMessage.apply_transpose(self, new_dict)
+
+        return  best_decrypted_message
     
 
 if __name__ == '__main__':
     wordlist = load_words(WORDLIST_FILENAME)
 
-#    # Example test case
-#    message = SubMessage("Hello World!")
-#    permutation = "eaiuo"
-#    enc_dict = message.build_transpose_dict(permutation)
-#    print("Original message:", message.get_message_text(), "Permutation:", permutation)
-#    print("Expected encryption:", "Hallu Wurld!")
-#    print("Actual encryption:", message.apply_transpose(enc_dict))
-#    enc_message = EncryptedSubMessage(message.apply_transpose(enc_dict))
-#    print("Decrypted message:", enc_message.decrypt_message())
-#    print("---------------------------------------------------")
+    # Example test case
+    message = SubMessage("Hello World!")
+    permutation = "eaiuo"
+    enc_dict = message.build_transpose_dict(permutation)
+    print("Original message:", message.get_message_text(), "Permutation:", permutation)
+    print("Expected encryption:", "Hallu Wurld!")
+    print("Actual encryption:", message.apply_transpose(enc_dict))
+    enc_message = EncryptedSubMessage(message.apply_transpose(enc_dict))
+    print("Decrypted message:", enc_message.decrypt_message())
+    print("---------------------------------------------------")
     
     message = SubMessage("Egg, bacon and Spam!")
     permutation = "iueoa"
@@ -203,5 +203,13 @@ if __name__ == '__main__':
     enc_message = EncryptedSubMessage(message.apply_transpose(enc_dict))
     print("Decrypted message:", enc_message.decrypt_message())
     print("---------------------------------------------------")
-    print(message.build_transpose_dict(permutation))
-    
+ 
+    message = SubMessage("Egg, sausage and bacon and some s#y*m@b,l!s")
+    permutation = "iauoe"
+    enc_dict = message.build_transpose_dict(permutation)
+    print("Original message:", message.get_message_text(), "Permutation:", permutation)
+    print("Expected encryption:", "Agg, siesiga ind bicon ind soma s#y*m@b,l!s")
+    print("Actual encryption:", message.apply_transpose(enc_dict))
+    enc_message = EncryptedSubMessage(message.apply_transpose(enc_dict))
+    print("Decrypted message:", enc_message.decrypt_message())
+    print("---------------------------------------------------")
