@@ -68,7 +68,6 @@ class Message(object):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        wordlist = load_words(WORDLIST_FILENAME)
         self.message_text = text
         self.valid_words = wordlist
 
@@ -127,9 +126,9 @@ class Message(object):
         Returns: the message text (string) in which every character is shifted
              down the alphabet by the input shift
         '''
-        encryption_dict = self.build_shift_dict(self.shift)
-        message_text_encrypted = ''.join([encryption_dict[letter] for letter in self.message_text
-                           if letter in encryption_dict])
+        encryption_dict = self.build_shift_dict(shift)
+        message_text_encrypted = "".join([encryption_dict.get(letter)
+        if letter in encryption_dict else letter for letter in self.message_text])
         return message_text_encrypted
 
 class PlaintextMessage(Message):
@@ -205,6 +204,8 @@ class CiphertextMessage(Message):
             self.valid_words (list, determined using helper function load_words)
         '''
         Message.__init__(self, text)
+        self.message_text = CiphertextMessage.get_message_text(self)
+        self.valid_words = self.get_valid_words()
 
     def decrypt_message(self):
         '''
@@ -222,33 +223,59 @@ class CiphertextMessage(Message):
         Returns: a tuple of the best shift value used to decrypt the message
         and the decrypted message text using that shift value
         '''
-        message_text_encrypted = self.get_message_text_encrypted(self)
-        word_list = self.get_valid_words(self)
+
         shifts = []
-        for shift in range (27):
-            for word in message_text_encrypted:
-                message_text_encrypted = self.apply_shift(self, shift)             
-                if is_word(word_list, word) is True:
-                    shifts[shift] += 1
-        best_shift = max(shifts)
-        decrypted_message = self.apply_shift(self, best_shift)
+        temp_text = self.message_text
+        for shift in range (26):
+            temp_text = self.message_text
+            temp_text = self.apply_shift(shift)
+            chars = " ,!@#$%^&*()-_+={}[]|\:;'<>?./\""
+            for c in chars:
+                temp_text = temp_text.replace(c, ' ')
+            temp_text = temp_text.split()
+            for word in temp_text:
+                count = 0                        
+                if is_word(self.valid_words, word) is True:
+                    count += 1
+            shifts.append(count)
+        best_shift = shifts.index(max(shifts))
+        decrypted_message = self.apply_shift(best_shift)
         return (best_shift, decrypted_message)
 
 if __name__ == '__main__':
+    
+    wordlist = load_words(WORDLIST_FILENAME)
 
 #    #Example test case (PlaintextMessage)
-#    plaintext = PlaintextMessage('hello', 2)
-#    print('Expected Output: jgnnq')
+#    plaintext = PlaintextMessage('Hello, world!', 2)
+#    print('Expected Output: Jgnnq, yqtnf!')
 #    print('Actual Output:', plaintext.get_message_text_encrypted())
+#    print("-------------------------------------------------------")
+#    
+#    plaintext = PlaintextMessage('Although never is often better than *right* now.', 4)
+#    print('Expected Output: Epxlsykl riziv mw sjxir fixxiv xler *vmklx* rsa.')
+#    print('Actual Output:', plaintext.get_message_text_encrypted())
+#    print("-------------------------------------------------------")
+#    
+#    plaintext = PlaintextMessage("Namespaces are one honking great idea -- let's do more of those!", 25)
+#    print("Expected Output: Mzldrozbdr zqd nmd gnmjhmf fqdzs hcdz -- kds'r cn lnqd ne sgnrd!")
+#    print('Actual Output:', plaintext.get_message_text_encrypted())
+#    print("-------------------------------------------------------")
 #
 #    #Example test case (CiphertextMessage)
-#    ciphertext = CiphertextMessage('jgnnq')
-#    print('Expected Output:', (24, 'hello'))
+#    ciphertext = CiphertextMessage('Jgnnq, yqtnf!')
+#    print('Expected Output:', (24, 'Hello, world!'))
 #    print('Actual Output:', ciphertext.decrypt_message())
-
-    #TODO: WRITE YOUR TEST CASES HERE
-
-    #TODO: best shift value and unencrypted story 
-
-
+#    print("-------------------------------------------------------")
+#    
+#    ciphertext = CiphertextMessage('Epxlsykl riziv mw sjxir fixxiv xler *vmklx* rsa.')
+#    print('Expected Output:', (22, 'Although never is often better than *right* now.'))
+#    print('Actual Output:', ciphertext.decrypt_message())
+#    print("-------------------------------------------------------")
+#    
+#    ciphertext = CiphertextMessage("Mzldrozbdr zqd nmd gnmjhmf fqdzs hcdz -- kds'r cn lnqd ne sgnrd!")
+#    print('Expected Output:', (1, "Namespaces are one honking great idea -- let's do more of those!"))
+#    print('Actual Output:', ciphertext.decrypt_message())
+#    print("-------------------------------------------------------")
+    
 
