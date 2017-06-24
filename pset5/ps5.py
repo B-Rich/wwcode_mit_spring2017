@@ -1,5 +1,5 @@
 # 6.0001/6.00 Problem Set 5 - RSS Feed Filter
-# Name:
+# Name: Marianna Kovalova
 # Collaborators:
 # Time:
 
@@ -55,17 +55,28 @@ def process(url):
 # Problem 1
 
 # TODO: NewsStory
-class NewsStory(guid, title, description, link, pubdate):
+class NewsStory(object):
+    def __init__(self, guid, title, description, link, pubdate):
+        self.guid = guid
+        self.title = title
+        self.description = description
+        self.link = link
+        self.pubdate = pubdate
+        
     def get_guid(self):
-        pass
+        return self.guid
+    
     def get_title(self):
-        pass
+        return self.title
+    
     def get_description(self):
-        pass
+        return self.description
+    
     def get_link(self):
-        pass
+        return self.link
+    
     def get_pubdate(self):
-        pass
+        return self.pubdate
 
 #======================
 # Triggers
@@ -84,13 +95,38 @@ class Trigger(object):
 
 # Problem 2
 # TODO: PhraseTrigger
+class PhraseTrigger(Trigger):
+    def __init__(self, phrase):
+        self.phrase = " ".join(phrase.lower())
+        
+    def is_phrase_in(self, story):
+        symbols = string.punctuation
+        for char in story:
+            if char in symbols:
+                new_story = story.replace(char, ' ')
+        new_story = " ".join(new_story.split())
+        if new_story.find(self.phrase) != -1:
+            return True
+        else:
+            return False
 
 # Problem 3
 # TODO: TitleTrigger
+class TitleTrigger(PhraseTrigger):
+    def __init__(self, phrase):
+        PhraseTrigger.__init__(self, phrase)
 
+    def evaluate(self, story):
+        return PhraseTrigger.is_phrase_in(self, story.get_title())
+    
 # Problem 4
 # TODO: DescriptionTrigger
-
+class DescriptionTrigger(PhraseTrigger):
+    def __init__(self, phrase):
+        PhraseTrigger.__init__(self, phrase)
+    def evaluate(self, story):
+        return PhraseTrigger.is_phrase_in(self, story.get_description())
+    
 # TIME TRIGGERS
 
 # Problem 5
